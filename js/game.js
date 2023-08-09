@@ -21,6 +21,8 @@ Game = {
 
         document.body.appendChild(Game.canvas);
 
+        Game.ship = new Ship();
+
         Game.animationLoop();
     },
     layout: function (ev) {
@@ -33,7 +35,7 @@ Game = {
         Game.canvas.height = VAR.H;
 
         Game.ctx.fillStyle = 'white';
-        Game.strokeStyle = 'white';
+        Game.ctx.strokeStyle = 'white';
         Game.ctx.lineWidth = 3;
         Game.ctx.lineJoin = 'round';
     },
@@ -42,6 +44,8 @@ Game = {
         if (time - VAR.lastTime >= 1000 / VAR.fps) {
             VAR.lastTime = time;
             Game.ctx.clearRect(0, 0, VAR.W, VAR.H);
+
+            Game.ship.draw();
         }
     }
 }
