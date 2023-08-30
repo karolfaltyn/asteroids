@@ -30,6 +30,27 @@ function Rock(size, x, y) {
         });
     }
 };
+
+Rock.prototype.hitTest = function (x, y) {
+    if (x > this.x - this.r * VAR.d && x < this.x + this.r * VAR.d && y > this.y - this.r * VAR.d && y < this.y + this.r * VAR.d) {
+
+        Game.hit_ctx.clearRect(this.x - this.r * VAR.d, this.y - this.r * VAR.d, this.r * 2 * VAR.d, this.r * 2 * VAR.d);
+        Game.hit_ctx.beginPath();
+
+        for (let i = 0; i < this.points.length; i++) {
+            Game.hit_ctx[i === 0 ? 'moveTo' : 'lineTo'](this.points[i].x * VAR.d + this.x, this.points[i].y * VAR.d + this.y);
+        }
+        Game.hit_ctx.closePath();
+        Game.hit_ctx.fill();
+
+        if (Game.hit_ctx.getImageData(x, y, 1, 1).data[0] == 255) {
+            return true;
+        }
+        return false;
+
+    }
+};
+
 Rock.prototype.draw = function () {
     this.x += this.modX * VAR.d;
     this.y += this.modY * VAR.d;
@@ -50,10 +71,19 @@ Rock.prototype.draw = function () {
     for (let i = 0; i < this.points.length; i++) {
         Game.ctx[i === 0 ? 'moveTo' : 'lineTo'](this.points[i].x * VAR.d + this.x, this.points[i].y * VAR.d + this.y);
     }
+
     Game.ctx.closePath();
     Game.ctx.stroke();
 };
 
+Rock.prototype.remove = function () {
+    if (this.size > 0) {
+        for (let i = 0, j = VAR.rand(2, 4); i < j; i++) {
+            new Rock(this.size - 1, this.x, this.y);
+        }
+    }
+    delete Rock.all[this.id];
+}
 Rock.draw = function () {
     Rock.num = 0;
     for (let r in Rock.all) {

@@ -14,11 +14,14 @@ VAR = {
 Game = {
     init: function () {
         Game.canvas = document.createElement('canvas');
+        Game.hit_canvas = document.createElement('canvas');
+        Game.hit_ctx = Game.hit_canvas.getContext('2d');
         Game.ctx = Game.canvas.getContext('2d');
         Game.layout();
 
         window.addEventListener('resize', Game.layout);
 
+        document.body.appendChild(Game.hit_canvas);
         document.body.appendChild(Game.canvas);
 
         for (let i = 0; i < 4; i++) {
@@ -58,6 +61,10 @@ Game = {
         Game.canvas.width = VAR.W;
         Game.canvas.height = VAR.H;
 
+        Game.hit_canvas.width = VAR.W;
+        Game.hit_canvas.height = VAR.H;
+        Game.hit_ctx.fillStyle = 'red';
+
         Game.ctx.fillStyle = 'white';
         Game.ctx.strokeStyle = 'white';
         Game.ctx.lineWidth = 3;
@@ -71,9 +78,9 @@ Game = {
 
             Game.ship.draw();
 
-            Bullet.draw();
-
             Rock.draw();
+
+            Bullet.draw();
         }
     }
 }
