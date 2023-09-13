@@ -21,7 +21,7 @@ Game = {
 
         window.addEventListener('resize', Game.layout);
 
-        document.body.appendChild(Game.hit_canvas);
+        // document.body.appendChild(Game.hit_canvas);
         document.body.appendChild(Game.canvas);
 
         for (let i = 0; i < 4; i++) {
@@ -35,7 +35,10 @@ Game = {
 
         Game.animationLoop();
     },
-
+    stop: function() {
+        window.removeEventListener('keydown', Game.onKey);
+        window.removeEventListener('keyup', Game.onKey);
+    },
     onKey: function (ev) {
         if (ev.keyCode == 32 || ev.keyCode == 37 || ev.keyCode == 38 || ev.keyCode == 39) {
             if (ev.type == 'keydown' && !Game['key_' + ev.keyCode]) {

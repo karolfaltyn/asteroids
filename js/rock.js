@@ -1,9 +1,9 @@
 Rock.count = 0;
 Rock.all = {};
 Rock.data = [
-    { r: 0.025, speed: 0.0005, minAngle: 60, maxAngle: 90 },
-    { r: 0.08, speed: 0.00025, minAngle: 50, maxAngle: 70 },
-    { r: 0.2, speed: 0.00006, minAngle: 30, maxAngle: 45 }
+    { r: 0.025, speed: 0.0005, minAngle: 60, maxAngle: 90, minSmallerRocks: 0, maxSmallerRocks: 0 },
+    { r: 0.08, speed: 0.00025, minAngle: 50, maxAngle: 70, minSmallerRocks: 2, maxSmallerRocks: 3 },
+    { r: 0.2, speed: 0.0000625, minAngle: 30, maxAngle: 45, minSmallerRocks: 3, maxSmallerRocks: 4 }
 ];
 
 function Rock(size, x, y) {
@@ -29,7 +29,7 @@ function Rock(size, x, y) {
             y: Math.cos(Math.PI / 180 * a) * this.r
         });
     }
-};
+}
 
 Rock.prototype.hitTest = function (x, y) {
     if (x > this.x - this.r * VAR.d && x < this.x + this.r * VAR.d && y > this.y - this.r * VAR.d && y < this.y + this.r * VAR.d) {
@@ -46,10 +46,9 @@ Rock.prototype.hitTest = function (x, y) {
         if (Game.hit_ctx.getImageData(x, y, 1, 1).data[0] == 255) {
             return true;
         }
-        return false;
-
     }
-};
+    return false;
+}
 
 Rock.prototype.draw = function () {
     this.x += this.modX * VAR.d;
@@ -71,15 +70,14 @@ Rock.prototype.draw = function () {
     for (let i = 0; i < this.points.length; i++) {
         Game.ctx[i === 0 ? 'moveTo' : 'lineTo'](this.points[i].x * VAR.d + this.x, this.points[i].y * VAR.d + this.y);
     }
-
     Game.ctx.closePath();
     Game.ctx.stroke();
-};
+}
 
 Rock.prototype.remove = function () {
     if (this.size > 0) {
-        for (let i = 0, j = VAR.rand(2, 4); i < j; i++) {
-            new Rock(this.size - 1, this.x, this.y);
+        for (var i = 0, j = VAR.rand(Rock.data[this.size].minSmallerRocks, Rock.data[this.size].maxSmallerRocks); i < j; i++) {
+            new Rock(this.size - 1, this.x, this.y)
         }
     }
     delete Rock.all[this.id];
@@ -90,4 +88,4 @@ Rock.draw = function () {
         Rock.num++;
         Rock.all[r].draw();
     }
-};
+}
