@@ -80,6 +80,7 @@ Rock.prototype.remove = function () {
             new Rock(this.size - 1, this.x, this.y)
         }
     }
+    Dot.add(this.x, this.y);
     delete Rock.all[this.id];
 }
 Rock.draw = function () {

@@ -35,7 +35,7 @@ Game = {
 
         Game.animationLoop();
     },
-    stop: function() {
+    stop: function () {
         window.removeEventListener('keydown', Game.onKey);
         window.removeEventListener('keyup', Game.onKey);
     },
@@ -84,6 +84,8 @@ Game = {
             Rock.draw();
 
             Bullet.draw();
+
+            Dot.draw();
         }
     }
 }
