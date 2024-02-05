@@ -8,7 +8,7 @@
  *  MIT License
  */
 
-(function() {
+(function () {
   // setup
   var cache = {};
 
@@ -16,7 +16,7 @@
   var ctx = null,
     usingWebAudio = true,
     noAudio = false;
-  if (typeof AudioContext !== 'undefined') {
+  if (typeof AudioContext.resume !== 'undefined') {
     ctx = new AudioContext();
   } else if (typeof webkitAudioContext !== 'undefined') {
     ctx = new webkitAudioContext();
@@ -35,7 +35,7 @@
   }
 
   // create global controller
-  var HowlerGlobal = function() {
+  var HowlerGlobal = function () {
     this._volume = 1;
     this._muted = false;
     this.usingWebAudio = usingWebAudio;
@@ -47,7 +47,7 @@
      * @param  {Float} vol Volume from 0.0 to 1.0.
      * @return {Howler/Float}     Returns self or current volume.
      */
-    volume: function(vol) {
+    volume: function (vol) {
       var self = this;
 
       // make sure volume is a number
@@ -64,7 +64,7 @@
         for (var key in self._howls) {
           if (self._howls.hasOwnProperty(key) && self._howls[key]._webAudio === false) {
             // loop through the audio nodes
-            for (var i=0; i<self._howls[key]._audioNode.length; i++) {
+            for (var i = 0; i < self._howls[key]._audioNode.length; i++) {
               self._howls[key]._audioNode[i].volume = self._howls[key]._volume * self._volume;
             }
           }
@@ -81,7 +81,7 @@
      * Mute all sounds.
      * @return {Howler}
      */
-    mute: function() {
+    mute: function () {
       this._setMuted(true);
 
       return this;
@@ -91,7 +91,7 @@
      * Unmute all sounds.
      * @return {Howler}
      */
-    unmute: function() {
+    unmute: function () {
       this._setMuted(false);
 
       return this;
@@ -101,7 +101,7 @@
      * Handle muting and unmuting globally.
      * @param  {Boolean} muted Is muted or not.
      */
-    _setMuted: function(muted) {
+    _setMuted: function (muted) {
       var self = this;
 
       self._muted = muted;
@@ -113,7 +113,7 @@
       for (var key in self._howls) {
         if (self._howls.hasOwnProperty(key) && self._howls[key]._webAudio === false) {
           // loop through the audio nodes
-          for (var i=0; i<self._howls[key]._audioNode.length; i++) {
+          for (var i = 0; i < self._howls[key]._audioNode.length; i++) {
             self._howls[key]._audioNode[i].muted = muted;
           }
         }
@@ -129,17 +129,17 @@
   if (!noAudio) {
     audioTest = new Audio();
     var codecs = {
-      mp3: !!audioTest.canPlayType('audio/mpeg;').replace(/^no$/,''),
-      opus: !!audioTest.canPlayType('audio/ogg; codecs="opus"').replace(/^no$/,''),
-      ogg: !!audioTest.canPlayType('audio/ogg; codecs="vorbis"').replace(/^no$/,''),
-      wav: !!audioTest.canPlayType('audio/wav; codecs="1"').replace(/^no$/,''),
-      m4a: !!(audioTest.canPlayType('audio/x-m4a;') || audioTest.canPlayType('audio/aac;')).replace(/^no$/,''),
-      webm: !!audioTest.canPlayType('audio/webm; codecs="vorbis"').replace(/^no$/,'')
+      mp3: !!audioTest.canPlayType('audio/mpeg;').replace(/^no$/, ''),
+      opus: !!audioTest.canPlayType('audio/ogg; codecs="opus"').replace(/^no$/, ''),
+      ogg: !!audioTest.canPlayType('audio/ogg; codecs="vorbis"').replace(/^no$/, ''),
+      wav: !!audioTest.canPlayType('audio/wav; codecs="1"').replace(/^no$/, ''),
+      m4a: !!(audioTest.canPlayType('audio/x-m4a;') || audioTest.canPlayType('audio/aac;')).replace(/^no$/, ''),
+      webm: !!audioTest.canPlayType('audio/webm; codecs="vorbis"').replace(/^no$/, '')
     };
   }
 
   // setup the audio object
-  var Howl = function(o) {
+  var Howl = function (o) {
     var self = this;
 
     // setup the defaults
@@ -156,11 +156,11 @@
     self._urls = o.urls || [];
 
     // setup event functions
-    self._onload = [o.onload || function() {}];
-    self._onloaderror = [o.onloaderror || function() {}];
-    self._onend = [o.onend || function() {}];
-    self._onpause = [o.onpause || function() {}];
-    self._onplay = [o.onplay || function() {}];
+    self._onload = [o.onload || function () { }];
+    self._onloaderror = [o.onloaderror || function () { }];
+    self._onend = [o.onend || function () { }];
+    self._onpause = [o.onpause || function () { }];
+    self._onplay = [o.onplay || function () { }];
 
     self._onendTimer = [];
 
@@ -186,7 +186,7 @@
      * Load an audio file.
      * @return {Howl}
      */
-    load: function() {
+    load: function () {
       var self = this,
         url = null;
 
@@ -206,7 +206,7 @@
       };
 
       // loop through source URLs and pick the first one that is compatible
-      for (var i=0; i<self._urls.length; i++) {
+      for (var i = 0; i < self._urls.length; i++) {
         var ext;
 
         if (self._format) {
@@ -248,12 +248,12 @@
 
         // setup the event listener to start playing the sound
         // as soon as it has buffered enough
-        var listener = function() {
+        var listener = function () {
           self._duration = newNode.duration;
 
           // setup a sprite if none is defined
           if (Object.getOwnPropertyNames(self._sprite).length === 0) {
-            self._sprite = {_default: [0, self._duration * 1000]};
+            self._sprite = { _default: [0, self._duration * 1000] };
           }
 
           if (!self._loaded) {
@@ -280,7 +280,7 @@
      * @param  {Array} urls  Arry of URLs to load from
      * @return {Howl}        Returns self or the current URLs
      */
-    urls: function(urls) {
+    urls: function (urls) {
       var self = this;
 
       if (urls) {
@@ -301,7 +301,7 @@
      * @param  {Function} callback (optional) Returns the unique playback id for this sound instance.
      * @return {Howl}
      */
-    play: function(sprite, callback) {
+    play: function (sprite, callback) {
       var self = this;
 
       // if no sprite was passed but a callback was, update the variables
@@ -316,7 +316,7 @@
 
       // if the sound hasn't been loaded, add it to the event queue
       if (!self._loaded) {
-        self.on('load', function() {
+        self.on('load', function () {
           self.play(sprite, callback);
         });
 
@@ -330,7 +330,7 @@
       }
 
       // get the node to playback
-      self._inactiveNode(function(node) {
+      self._inactiveNode(function (node) {
         // persist the sprite being played
         node._sprite = sprite;
 
@@ -344,13 +344,13 @@
         // set timer to fire the 'onend' event
         var soundId = (typeof callback === 'string') ? callback : Math.round(Date.now() * Math.random()) + '',
           timerId;
-        (function() {
+        (function () {
           var data = {
             id: soundId,
             sprite: sprite,
             loop: loop
           };
-          timerId = setTimeout(function() {
+          timerId = setTimeout(function () {
             // if looping, restart the track
             if (!self._webAudio && loop) {
               self.stop(data.id, data.timer).play(sprite, data.id);
@@ -400,12 +400,12 @@
           } else {
             self._clearEndTimer(timerId);
 
-            (function(){
+            (function () {
               var sound = self,
                 playSprite = sprite,
                 fn = callback,
                 newNode = node;
-              var listener = function() {
+              var listener = function () {
                 sound.play(playSprite, fn);
 
                 // clear the event listener
@@ -434,12 +434,12 @@
      * @param {String} timerId (optional) Clear the correct timeout ID.
      * @return {Howl}
      */
-    pause: function(id, timerId) {
+    pause: function (id, timerId) {
       var self = this;
 
       // if the sound hasn't been loaded, add it to the event queue
       if (!self._loaded) {
-        self.on('play', function() {
+        self.on('play', function () {
           self.pause(id);
         });
 
@@ -481,12 +481,12 @@
      * @param  {String} timerId  (optional) Clear the correct timeout ID.
      * @return {Howl}
      */
-    stop: function(id, timerId) {
+    stop: function (id, timerId) {
       var self = this;
 
       // if the sound hasn't been loaded, add it to the event queue
       if (!self._loaded) {
-        self.on('play', function() {
+        self.on('play', function () {
           self.stop(id);
         });
 
@@ -527,12 +527,12 @@
      * @param  {String} id (optional) The play instance ID.
      * @return {Howl}
      */
-    mute: function(id) {
+    mute: function (id) {
       var self = this;
 
       // if the sound hasn't been loaded, add it to the event queue
       if (!self._loaded) {
-        self.on('play', function() {
+        self.on('play', function () {
           self.mute(id);
         });
 
@@ -556,12 +556,12 @@
      * @param  {String} id (optional) The play instance ID.
      * @return {Howl}
      */
-    unmute: function(id) {
+    unmute: function (id) {
       var self = this;
 
       // if the sound hasn't been loaded, add it to the event queue
       if (!self._loaded) {
-        self.on('play', function() {
+        self.on('play', function () {
           self.unmute(id);
         });
 
@@ -586,7 +586,7 @@
      * @param  {String} id  (optional) The play instance ID.
      * @return {Howl/Float}     Returns self or current volume.
      */
-    volume: function(vol, id) {
+    volume: function (vol, id) {
       var self = this;
 
       // make sure volume is a number
@@ -594,7 +594,7 @@
 
       // if the sound hasn't been loaded, add it to the event queue
       if (!self._loaded) {
-        self.on('play', function() {
+        self.on('play', function () {
           self.volume(vol, id);
         });
 
@@ -624,7 +624,7 @@
      * @param  {Boolean} loop To loop or not to loop, that is the question.
      * @return {Howl/Boolean}      Returns self or current looping value.
      */
-    loop: function(loop) {
+    loop: function (loop) {
       var self = this;
 
       if (typeof loop === 'boolean') {
@@ -644,7 +644,7 @@
      *                @param {Boolean} loop     (optional) Set true to loop this sprite
      * @return {Howl}        Returns current sprite sheet or self.
      */
-    sprite: function(sprite) {
+    sprite: function (sprite) {
       var self = this;
 
       if (typeof sprite === 'object') {
@@ -662,12 +662,12 @@
      * @param  {String} id  (optional) The play instance ID.
      * @return {Howl/Float}      Returns self or current playback position.
      */
-    pos: function(pos, id) {
+    pos: function (pos, id) {
       var self = this;
 
       // if the sound hasn't been loaded, add it to the event queue
       if (!self._loaded) {
-        self.on('load', function() {
+        self.on('load', function () {
           self.pos(pos);
         });
 
@@ -710,7 +710,7 @@
      * @param  {String} id (optional) The play instance ID.
      * @return {Howl/Array}   Returns self or the current 3D position: [x, y, z]
      */
-    pos3d: function(x, y, z, id) {
+    pos3d: function (x, y, z, id) {
       var self = this;
 
       // set a default for the optional 'y' & 'z'
@@ -719,7 +719,7 @@
 
       // if the sound hasn't been loaded, add it to the event queue
       if (!self._loaded) {
-        self.on('play', function() {
+        self.on('play', function () {
           self.pos3d(x, y, z, id);
         });
 
@@ -750,7 +750,7 @@
      * @param  {String}   id       (optional) The play instance ID.
      * @return {Howl}
      */
-    fade: function(from, to, len, callback, id) {
+    fade: function (from, to, len, callback, id) {
       var self = this,
         diff = Math.abs(from - to),
         dir = from > to ? 'down' : 'up',
@@ -759,7 +759,7 @@
 
       // if the sound hasn't been loaded, add it to the event queue
       if (!self._loaded) {
-        self.on('load', function() {
+        self.on('load', function () {
           self.fade(from, to, len, callback, id);
         });
 
@@ -769,13 +769,13 @@
       // set the volume to the start position
       self.volume(from, id);
 
-      for (var i=1; i<=steps; i++) {
-        (function() {
+      for (var i = 1; i <= steps; i++) {
+        (function () {
           var change = self._volume + (dir === 'up' ? 0.01 : -0.01) * i,
             vol = Math.round(1000 * change) / 1000,
             toVol = to;
 
-          setTimeout(function() {
+          setTimeout(function () {
             self.volume(vol, id);
 
             if (vol === toVol) {
@@ -793,7 +793,7 @@
      * @param  {Function} callback
      * @return {Howl}
      */
-    fadeIn: function(to, len, callback) {
+    fadeIn: function (to, len, callback) {
       return this.volume(0).play().fade(0, to, len, callback);
     },
 
@@ -805,10 +805,10 @@
      * @param  {String}   id       (optional) The play instance ID.
      * @return {Howl}
      */
-    fadeOut: function(to, len, callback, id) {
+    fadeOut: function (to, len, callback, id) {
       var self = this;
 
-      return self.fade(self._volume, to, len, function() {
+      return self.fade(self._volume, to, len, function () {
         if (callback) callback();
         self.pause(id);
 
@@ -821,12 +821,12 @@
      * Get an audio node by ID.
      * @return {Howl} Audio node.
      */
-    _nodeById: function(id) {
+    _nodeById: function (id) {
       var self = this,
         node = self._audioNode[0];
 
       // find the node with this ID
-      for (var i=0; i<self._audioNode.length; i++) {
+      for (var i = 0; i < self._audioNode.length; i++) {
         if (self._audioNode[i].id === id) {
           node = self._audioNode[i];
           break;
@@ -840,12 +840,12 @@
      * Get the first active audio node.
      * @return {Howl} Audio node.
      */
-    _activeNode: function() {
+    _activeNode: function () {
       var self = this,
         node = null;
 
       // find the first playing node
-      for (var i=0; i<self._audioNode.length; i++) {
+      for (var i = 0; i < self._audioNode.length; i++) {
         if (!self._audioNode[i].paused) {
           node = self._audioNode[i];
           break;
@@ -863,12 +863,12 @@
      * If there is none, create a new one and add it to the pool.
      * @param  {Function} callback Function to call when the audio node is ready.
      */
-    _inactiveNode: function(callback) {
+    _inactiveNode: function (callback) {
       var self = this,
         node = null;
 
       // find first inactive node to recycle
-      for (var i=0; i<self._audioNode.length; i++) {
+      for (var i = 0; i < self._audioNode.length; i++) {
         if (self._audioNode[i].paused && self._audioNode[i].readyState === 4) {
           callback(self._audioNode[i]);
           node = true;
@@ -891,7 +891,7 @@
       } else {
         self.load();
         newNode = self._audioNode[self._audioNode.length - 1];
-        newNode.addEventListener('loadedmetadata', function() {
+        newNode.addEventListener('loadedmetadata', function () {
           callback(newNode);
         });
       }
@@ -900,20 +900,20 @@
     /**
      * If there are more than 5 inactive audio nodes in the pool, clear out the rest.
      */
-    _drainPool: function() {
+    _drainPool: function () {
       var self = this,
         inactive = 0,
         i;
 
       // count the number of inactive nodes
-      for (i=0; i<self._audioNode.length; i++) {
+      for (i = 0; i < self._audioNode.length; i++) {
         if (self._audioNode[i].paused) {
           inactive++;
         }
       }
 
       // remove excess inactive nodes
-      for (i=self._audioNode.length-1; i>=0; i--) {
+      for (i = self._audioNode.length - 1; i >= 0; i--) {
         if (inactive <= 5) {
           break;
         }
@@ -929,7 +929,7 @@
      * Clear 'onend' timeout before it ends.
      * @param  {Number} timerId The ID of the sound to be cancelled.
      */
-    _clearEndTimer: function(timerId) {
+    _clearEndTimer: function (timerId) {
       var self = this,
         timer = self._onendTimer.indexOf(timerId);
 
@@ -946,7 +946,7 @@
      * Setup the gain node and panner for a Web Audio instance.
      * @return {Object} The new audio node.
      */
-    _setupAudioNode: function() {
+    _setupAudioNode: function () {
       var self = this,
         node = self._audioNode,
         index = self._audioNode.length;
@@ -973,14 +973,14 @@
      * @param  {Function} fn    Function to call.
      * @return {Howl}
      */
-    on: function(event, fn) {
+    on: function (event, fn) {
       var self = this,
         events = self['_on' + event];
 
       if (typeof fn === "function") {
         events.push(fn);
       } else {
-        for (var i=0; i<events.length; i++) {
+        for (var i = 0; i < events.length; i++) {
           if (fn) {
             events[i].call(self, fn);
           } else {
@@ -998,13 +998,13 @@
      * @param  {Function} fn    Listener to remove.
      * @return {Howl}
      */
-    off: function(event, fn) {
+    off: function (event, fn) {
       var self = this,
         events = self['_on' + event],
         fnString = fn.toString();
 
       // loop through functions in the event for comparison
-      for (var i=0; i<events.length; i++) {
+      for (var i = 0; i < events.length; i++) {
         if (fnString === events[i].toString()) {
           events.splice(i, 1);
           break;
@@ -1024,7 +1024,7 @@
      * @param  {Object} obj The Howl object for the sound to load.
      * @param  {String} url The path to the sound file.
      */
-    var loadBuffer = function(obj, url) {
+    var loadBuffer = function (obj, url) {
       // check if the buffer has already been cached
       if (url in cache) {
         // set the duration from the cache
@@ -1037,16 +1037,16 @@
         var xhr = new XMLHttpRequest();
         xhr.open('GET', url, true);
         xhr.responseType = 'arraybuffer';
-        xhr.onload = function() {
+        xhr.onload = function () {
           // decode the buffer into an audio source
-          ctx.decodeAudioData(xhr.response, function(buffer) {
+          ctx.decodeAudioData(xhr.response, function (buffer) {
             if (buffer) {
               cache[url] = buffer;
               loadSound(obj, buffer);
             }
           });
         };
-        xhr.onerror = function() {
+        xhr.onerror = function () {
           // if there is an error, switch the sound to HTML Audio
           if (obj._webAudio) {
             obj._buffer = true;
@@ -1069,13 +1069,13 @@
      * @param  {Object}  obj    The Howl object for the sound to load.
      * @param  {Objecct} buffer The decoded buffer sound source.
      */
-    var loadSound = function(obj, buffer) {
+    var loadSound = function (obj, buffer) {
       // set the duration
       obj._duration = (buffer) ? buffer.duration : obj._duration;
 
       // setup a sprite if none is defined
       if (Object.getOwnPropertyNames(obj._sprite).length === 0) {
-        obj._sprite = {_default: [0, obj._duration * 1000]};
+        obj._sprite = { _default: [0, obj._duration * 1000] };
       }
 
       // fire the loaded event
@@ -1095,7 +1095,7 @@
      * @param  {Array}  loop  Loop boolean, pos, and duration.
      * @param  {String} id    (optional) The play instance ID.
      */
-    var refreshBuffer = function(obj, loop, id) {
+    var refreshBuffer = function (obj, loop, id) {
       // determine which node to connect to
       var node = obj._nodeById(id);
 
@@ -1116,7 +1116,7 @@
    * Add support for AMD (Async Module Definition) libraries such as require.js.
    */
   if (typeof define === 'function' && define.amd) {
-    define('Howler', function() {
+    define('Howler', function () {
       return {
         Howler: Howler,
         Howl: Howl
