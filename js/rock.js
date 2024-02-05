@@ -75,6 +75,7 @@ Rock.prototype.draw = function () {
 }
 
 Rock.prototype.remove = function () {
+    Sounds.play('bum' + VAR.rand(1, 2));
     if (this.size > 0) {
         for (var i = 0, j = VAR.rand(Rock.data[this.size].minSmallerRocks, Rock.data[this.size].maxSmallerRocks); i < j; i++) {
             new Rock(this.size - 1, this.x, this.y)
@@ -88,5 +89,9 @@ Rock.draw = function () {
     for (let r in Rock.all) {
         Rock.num++;
         Rock.all[r].draw();
+    }
+    if (Rock.num === 0 && !Game.success) {
+        Game.success = true;
+        Sounds.play('win');
     }
 }

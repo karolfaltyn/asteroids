@@ -100,6 +100,13 @@ Ship.prototype.draw = function () {
                 this.draw_thrust = true;
             }
 
+            if (Game.key_38 && (!Game.thrust_sound || Game.thrust_sound <= 0)) {
+                Game.thrust_sound = 60
+                Sounds.play('thrust')
+                Game.thrust_sound -= 1000 / VAR.fps
+                Game.thrust_sound = false
+            }
+
             if (this.points[0].x < 0 && this.points[1].x < 0 && this.points[2].x < 0) {
                 this.x += VAR.W - Math.min(this.points[0].x, this.points[1].x, this.points[2].x) * 0.9;
             } else if (this.points[0].x > VAR.W && this.points[1].x > VAR.W && this.points[2].x > VAR.W) {
