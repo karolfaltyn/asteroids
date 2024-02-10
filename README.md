@@ -30,6 +30,11 @@ The game ends when your spaceship collides with an asteroid. Challenge yourself 
 - **Arrow Keys:** Use the arrow keys (up, down, left, right) to control the movement of your spaceship.
 - **Spacebar:** Press the spacebar to shoot blasters and destroy asteroids.
 
+## Technologies Used
+
+- HTML
+- JavaScript
+
 ## License
 
 This project is licensed under the MIT License.
