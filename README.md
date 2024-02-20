@@ -5,7 +5,7 @@ Asteroids is a classic arcade-style game from 1979, that allows players to contr
 
 ## Getting Started
 
-To play online, visit [https://karolfaltyn.github.io/asteroids/](https://karolfaltyn.github.io/asteroids/)
+To play online, visit [https://karolfaltyn.github.io/asteroids/](https://karolfaltyn.github.io/asteroids/).
 
 To install project locally, follow these steps:
 
